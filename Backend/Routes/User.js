@@ -37,6 +37,7 @@ router.post("/signup", [
         }
         const authToken = jwt.sign(data, JWT_SECRET);
         res.json({ authToken });
+
     }
     catch (error) {
         console.error(error.message);
@@ -66,6 +67,7 @@ router.post("/login", [
             user: {
                 id: user.id
             }
+            
         }
         const authToken = jwt.sign(data, JWT_SECRET);
         res.json({ authToken });

@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user",require("./Routes/User"));
+app.use("/api/product",require("./Routes/Product"));
 app.get("/",async(req,res)=>{
     res.json("Server running");
 })
