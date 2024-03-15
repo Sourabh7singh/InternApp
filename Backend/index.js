@@ -16,6 +16,8 @@ app.use(cors());
 
 app.use("/api/user",require("./Routes/User"));
 app.use("/api/product",require("./Routes/Product"));
+app.use("/api/events",require("./Routes/Events"));
+
 app.get("/",async(req,res)=>{
     res.json("Server running");
 })

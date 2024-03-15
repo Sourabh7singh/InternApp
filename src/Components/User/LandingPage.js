@@ -73,13 +73,12 @@ const LandingPage = () => {
                     <span className="visually-hidden">Next</span>
                 </button>
             </div>
-            {/* products */}
-            <div className='container text-center m-5 ' style={{fontSize:"1.5rem"}}>
+            <div className='container text-center mt-2 mb-2' style={{borderTop:"2px solid black",fontSize:"1.5rem",fontFamily:"cursive"}}>
                 <p>Products</p>
             </div>
             <div className="container d-grid gap-5 mt-2" style={{gridTemplateColumns:"1fr 1fr 1fr 1fr"}}>
-                {data && data.map((item) => {
-                    return <div key={item.id} className="card">
+                {data && data.map((item,index) => {
+                    return <div key={index} className="card">
                         <img src={item.image} className="card-img-top" alt="..." />
                         <div className="card-body">
                             <h5 className="card-title">Course {item.id}</h5>

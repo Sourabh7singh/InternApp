@@ -5,7 +5,7 @@ import { DataContext } from '../DataState';
 
 const Productdetails = () => {
     const navigate = useNavigate();
-    const {data} = useContext(DataContext);
+    const {products} = useContext(DataContext);
     const [product, setProduct] = useState();
     const currentProduct = localStorage.getItem("CurrentProduct");
     useEffect(() => {
@@ -13,7 +13,7 @@ const Productdetails = () => {
             navigate("/user/products");
         }
         else {
-            setProduct(data.filter((item)=>{return item._id === currentProduct})[0]);
+            setProduct(products.filter((item)=>{return item._id === currentProduct})[0]);
         }
         // eslint-disable-next-line
     }, []);

@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
+import { DataContext } from '../Components/DataState';
 
 const Login = ( props) => {
+    const {isAdmin,setAdmin} = useContext(DataContext);
     const {isLoginpage} = props;
     const [data,setData] = useState({
         ...(!isLoginpage && {name:""}),
@@ -39,13 +41,16 @@ const Login = ( props) => {
               navigate("/");
               // Navigate("/");
             } 
-            else alert("Error, Please try again Later");
+            else{
+              alert("Error, Please try again Later");
+            } 
+              
         }
     }
   return (
     <form className='form-container'>
       <div className='main-form' id="form">
-        <h2>Welcome</h2>
+        <h2>Welcome {}</h2>
         {!isLoginpage?<p>Sign in to get started</p>:<p>Log in to the application</p>}
         {!isLoginpage?<><label htmlFor="name">Enter your Full-Name</label>
         <input onChange={(e)=>{setData({...data,name:e.target.value})}} value={data.name} type="text" name="name" id="name"/></>:""}

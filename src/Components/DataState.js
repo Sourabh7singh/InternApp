@@ -2,23 +2,33 @@ import React, { createContext, useEffect, useState } from 'react'
 
 export const DataContext = createContext();
 const DataState = (props) => {
-    const [data,setData]=useState([]);
+    const [products,setProduct]=useState([]);
+    const [events,setEvents]=useState([]);
+    const [isAdmin,setAdmin]=useState(false);
     const fetchData =async()=>{
-        const res = await fetch("http://localhost:8000/api/product/fetch",{
+        const products = await fetch("http://localhost:8000/api/product/fetch",{
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
             }
         })
-        const result = await res.json();
-        setData(result);
+        const parsedProducts = await products.json();
+        setProduct(parsedProducts);
+        const event = await fetch("http://localhost:8000/api/events",{
+            method:"GET",
+            headers:{
+                "Content-Type":"application/json",
+            }
+        })
+        const parsedEvents = await event.json();
+        setEvents(parsedEvents);
     }
     useEffect(()=>{
         fetchData();
         // eslint-disable-next-line
     },[]);
   return (
-    <DataContext.Provider value={{data}}>
+    <DataContext.Provider value={{events,products,isAdmin,setAdmin}}>
         {props.children}
     </DataContext.Provider>
   )

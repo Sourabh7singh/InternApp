@@ -8,7 +8,7 @@ const Navbar = () => {
         window.location.href="/user/login";
     }
     return (
-        <nav className="navbar bg-body-tertiary fixed-top " data-bs-theme="dark">
+        <nav className="navbar bg-body-tertiary " data-bs-theme="dark">
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">CourseMania</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
