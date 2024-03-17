@@ -19,8 +19,9 @@ router.post("/signup", [
     }
     try {
         //check whether the user already exist or not?
-        let user = await User.findOne({ email: req.body.email });
+        let user = await User.findOne({ email: req.body.email});
         if (user) {
+            //A user can be a user and an admin both
             return res.status(400).json({ msg: "User Already Exist" });
         }
         const salt = await bcrypt.genSalt(10);
@@ -28,6 +29,7 @@ router.post("/signup", [
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
+            isAdmin: req.body.isAdmin,
             password: secPass
         });
         const data = {
@@ -36,12 +38,11 @@ router.post("/signup", [
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
-
+        res.json({ authToken ,isAdmin:user.isAdmin});
     }
     catch (error) {
         console.error(error.message);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json("Internal Server Error");
     }
 })
 //Authenticate  a user using : POST on '/api/auth/login' no login required
@@ -53,10 +54,13 @@ router.post("/login", [
     if (!errors.isEmpty()) {
         return res.status(400).json({ msg: errors.array() });
     }
-    const { email, password } = req.body;
+    const { email, password, isAdmin} = req.body;
     try {
-        let user = await User.findOne({ email });
+        let user = await User.findOne({email});
         if (!user) {
+            return res.status(400).json({ msg: "Please Try to login with correct credentials" });
+        }
+        if(isAdmin!==user.isAdmin){
             return res.status(400).json({ msg: "Please Try to login with correct credentials" });
         }
         const passwordcompare = await bcrypt.compare(password, user.password);
@@ -67,10 +71,10 @@ router.post("/login", [
             user: {
                 id: user.id
             }
-            
         }
+        console.log(user);
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+        res.json({ authToken ,isAdmin:user.isAdmin});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");

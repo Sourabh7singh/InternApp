@@ -4,7 +4,7 @@ export const DataContext = createContext();
 const DataState = (props) => {
     const [products,setProduct]=useState([]);
     const [events,setEvents]=useState([]);
-    const [isAdmin,setAdmin]=useState(false);
+    const [isAdmin,setAdmin]=useState(JSON.parse(localStorage.getItem('isAdmin'))||false);
     const fetchData =async()=>{
         const products = await fetch("http://localhost:8000/api/product/fetch",{
             method:"GET",
@@ -28,7 +28,7 @@ const DataState = (props) => {
         // eslint-disable-next-line
     },[]);
   return (
-    <DataContext.Provider value={{events,products,isAdmin,setAdmin}}>
+    <DataContext.Provider value={{events,products,isAdmin,setAdmin,fetchData}}>
         {props.children}
     </DataContext.Provider>
   )

@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { DataContext } from './DataState'
 
 const Navbar = () => {
+    const {isAdmin} = useContext(DataContext);
+    // console.log(isAdmin);
     const handleLogout=(e)=>{
         e.preventDefault();
         localStorage.removeItem("authToken");
+        localStorage.removeItem("isAdmin");
         window.location.href="/user/login";
     }
     return (
@@ -22,10 +26,10 @@ const Navbar = () => {
                     <div className="offcanvas-body">
                         <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li className="nav-item">
-                                <Link className="nav-link" aria-current="page" to="/">Home</Link>
+                                <Link className="nav-link" aria-current="page" to={isAdmin?"/admin":"/"}>Home</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/user/events">Events</Link>
+                                <Link className="nav-link" to={isAdmin?"/admin/events":"/user/events"}>Events</Link>
                             </li>
                             <li className="nav-item">
                                 <button className="nav-link" onClick={(e)=>handleLogout(e)}>Logout</button>
