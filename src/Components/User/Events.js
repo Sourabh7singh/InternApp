@@ -79,10 +79,10 @@ const Events = () => {
                     </div>
                 </div>
                 })
-                :"No events found"
+                :<h5 className='text-center'>"No events found"</h5>
             }
             <h5 className='text-center m-4 p-3  font-monospace' style={{borderTop:"2px solid black"}}>List of Joined events</h5>
-            {joinedEvents&&
+            {joinedEvents.length>0?
                 joinedEvents.map((item,index)=>{
                     return <div key={index} className="card m-5">
                     <h5 className="card-header">Main-Event {index+1}</h5>
@@ -94,7 +94,7 @@ const Events = () => {
                         <button className="btn btn-primary" disabled onClick={(e) => HandleJoin(item._id)}>Already Joined</button>
                     </div>
                 </div>
-                })
+                }):<h5 className='text-center'>"No events joined"</h5>
             }
         </>
     )
