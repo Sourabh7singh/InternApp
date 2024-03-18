@@ -13,14 +13,6 @@ router.get('/fetch', async (req, res) => {
     }
 });
 
-router.post("/fetchone",async(req,res)=>{
-    try {
-        const product = await Product.findById(req.body.id);
-        res.json(product);
-    } catch (error) {
-        res.json("Error");
-    }
-})
 router.post("/add",async(req,res)=>{
     try {
         const newProduct = await Product.create({
@@ -40,6 +32,14 @@ router.post("/delete/:id",async(req,res)=>{
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
         res.json({msg:`Deleted Product ${product.course_name}`});
+    } catch (error) {
+        res.json({msg:"Error"});
+    }
+})
+router.post("/update/:id",async(req,res)=>{
+    try {
+        const product = await Product.findByIdAndUpdate(req.params.id,req.body);
+        res.json({msg:`Updated Product ${product.course_name}`});
     } catch (error) {
         res.json({msg:"Error"});
     }

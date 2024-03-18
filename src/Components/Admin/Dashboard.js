@@ -3,10 +3,12 @@ import Navbar from '../Navbar';
 import { DataContext } from '../DataState';
 
 const Dashboard = () => {
-  const { isAdmin, products,fetchData,ServerUrl } = useContext(DataContext);
+  const { products,fetchData,ServerUrl } = useContext(DataContext);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [Id, setId] = useState();
+
   const [imageFile, setImageFile] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -14,41 +16,40 @@ const Dashboard = () => {
     e.preventDefault();
     // Convert image to base64
     if (!name || !description || !price || !imageFile) {
+      console.log(name,description,price,imageFile);
       alert("Please fill all the details");
       return;
     }
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result;
-      fetch(`${ServerUrl}//api/product/add`, {
+      let url;
+      if(isUpdating){
+        // url = `${ServerUrl}/api/product/update/${Id}`;
+        url = `http://localhost:8000/api/product/update/${Id}`;
+      }else{
+        // url = `${ServerUrl}/api/product/add`;
+        url = `http://localhost:8000/api/product/add`;
+      }
+      fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({name,description,price,image:base64String}),
       }).then((res) => res.json()).then((data) => alert(data.msg));
-      // AddCourse();
     };
-    reader.readAsDataURL(imageFile);
     fetchData();
+    reader.readAsDataURL(imageFile);
   };
   const handleUpdate = async(id) => {
     setIsUpdating(true);
-    // let url=`${ServerUrl}/api/events/add`;
-    // if(isUpdating){
-    //   url = `${ServerUrl}/api/events/update`;
-    // }
-    console.log(`${ServerUrl}/api/product/fetchone`);
-    const res = await fetch(`${ServerUrl}/api/product/fetchone`, {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:JSON.stringify({id})
-    })
-    const result = await res.json();
-    console.log(result);
-    setIsUpdating(false);
+    const current = products.filter((item) => item._id === id)[0];
+    setName(current.course_name);
+    setDescription(current.description);
+    setPrice(current.price);
+    setImageFile(current.image);
+    setId(id);
     fetchData();
   };
   

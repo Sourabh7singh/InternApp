@@ -15,6 +15,7 @@ import Dashboard from './Components/Admin/Dashboard';
 import AdminEvents from './Components/Admin/AdminEvents';
 import Success from './Components/User/Success';
 import Cancel from './Components/User/Cancel';
+import Profile from './Components/Profile';
 
 const router = createBrowserRouter([
   //User Routes
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
   {
     path: "/cancel",
     element: <Cancel/>
+  },
+  {
+    path: "/profile",
+    element: <Profile/>
   },
 ]);
 

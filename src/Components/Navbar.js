@@ -33,6 +33,9 @@ const Navbar = () => {
                                 <Link className="nav-link" to={isAdmin?"/admin/events":"/user/events"}>Events</Link>
                             </li>
                             <li className="nav-item">
+                                <Link className="nav-link" to="/profile">Profile</Link>
+                            </li>
+                            <li className="nav-item">
                                 <button className="nav-link" onClick={(e)=>handleLogout(e)}>Logout</button>
                             </li>
                         </ul>
