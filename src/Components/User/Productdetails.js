@@ -32,6 +32,8 @@ const Productdetails = () => {
     return (
         <>
             <Navbar />
+            {/* Create purchased products section below  */}
+            {/* do same in events as well for joined event */}
             <div className='container top-50 absolute'>
                 {
                     product &&

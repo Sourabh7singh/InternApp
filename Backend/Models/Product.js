@@ -18,7 +18,7 @@ const ProductSchema = new Schema({
         required:true
     },
     purchasedBy:{
-        type:Array
+        type:Object
     }
   });
 

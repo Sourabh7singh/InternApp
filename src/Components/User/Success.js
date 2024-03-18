@@ -7,8 +7,9 @@ const Success = () => {
     const productId = localStorage.getItem("BeingPurchased");
     const userId = localStorage.getItem("userId");
     setTimeout(() => {
+        localStorage.removeItem("BeingPurchased");
         window.location.href = "/user";
-    }, 2000);
+    }, 5000);
     useEffect(()=>{
         fetch(`${ServerUrl}api/product/purchased`,{
             method:"POST",
@@ -25,7 +26,7 @@ const Success = () => {
             <section>
                 <p>
                     We appreciate your business! If you have any questions, please email
-                    <a href="mailto:orders@example.com">orders@example.com</a>.
+                    You'll be redirected automatically to the main website in 5 seconds.
                 </p>
             </section>
         </>

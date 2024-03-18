@@ -49,7 +49,7 @@ router.post("/purchased",async(req,res)=>{
         const product = await Product.findById(productId);
         console.log("here");
         if(product){
-            product.purchasedBy.push(userId);
+            product.purchasedBy.push({userId,Date:new Date()});
             const savedProduct = await product.save();
             res.json({"msg":`Purchased ${savedProduct.course_name}`});
         }else{
