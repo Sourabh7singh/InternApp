@@ -51,7 +51,6 @@ const AdminEvents = () => {
         setDate("");
         fetchData();
     }
-    console.log(events);
     return (
         <>
             <Navbar />

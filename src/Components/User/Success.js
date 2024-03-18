@@ -1,15 +1,34 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import Navbar from '../Navbar';
+import { DataContext } from '../DataState';
 
 const Success = () => {
+    const {ServerUrl} = useContext(DataContext);
+    const productId = localStorage.getItem("BeingPurchased");
+    const userId = localStorage.getItem("userId");
+    setTimeout(() => {
+        window.location.href = "/user";
+    }, 2000);
+    useEffect(()=>{
+        fetch(`${ServerUrl}api/product/purchased`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({userId,productId})
+        }).then((res)=>res.json()).then((data)=>alert(data.msg)); 
+        //eslint-disable-next-line
+    },[]);
     return (
-        <div>
+        <>
+        <Navbar/>
             <section>
                 <p>
                     We appreciate your business! If you have any questions, please email
                     <a href="mailto:orders@example.com">orders@example.com</a>.
                 </p>
             </section>
-        </div>
+        </>
     )
 }
 

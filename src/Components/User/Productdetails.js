@@ -17,18 +17,17 @@ const Productdetails = () => {
         }
         // eslint-disable-next-line
     }, []);
-    const HandlePurchase = async(price)=>{
+    const HandlePurchase = async(price,id)=>{
         const res = await fetch(`${ServerUrl}/api/product/create-checkout-session`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
             },
-            body:JSON.stringify({"price":price})
+            body:JSON.stringify({"price":price,"productId":id})
         })
         const result = await res.json();
-        // navigate(result.url);
         window.location.href = result.url;
-        // console.log(result);
+        localStorage.setItem("BeingPurchased",result.productId);
     }
     return (
         <>
@@ -57,7 +56,7 @@ const Productdetails = () => {
                             <h3>Price: {product.price}/-</h3>
                         </div>
                         <div className="buy">
-                            <button className='btn btn-primary' onClick={()=>HandlePurchase(product.price)}>Buy This course</button>
+                            <button className='btn btn-primary' onClick={()=>HandlePurchase(product.price,product._id)}>Buy This course</button>
                         </div>
                     </div>
                 }

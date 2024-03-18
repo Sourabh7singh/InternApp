@@ -7,7 +7,6 @@ router.get('/fetch', async (req, res) => {
     try {
         const data = await Product.find();
         res.json(data); 
-        console.log("Responce sent");
     } catch (error) {
         res.json("Error");
     }
@@ -44,10 +43,27 @@ router.post("/update/:id",async(req,res)=>{
         res.json({msg:"Error"});
     }
 })
+router.post("/purchased",async(req,res)=>{
+    const {userId,productId} = req.body;
+    try {
+        const product = await Product.findById(productId);
+        console.log("here");
+        if(product){
+            product.purchasedBy.push(userId);
+            const savedProduct = await product.save();
+            res.json({"msg":`Purchased ${savedProduct.course_name}`});
+        }else{
+            res.json({"msg":"Product not found"});
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.json({"msg":"Error"});
+    }
+})
 //update after hosting it
 const YOUR_DOMAIN = 'http://localhost:3000';
 router.post('/create-checkout-session', async (req, res) => {
-    const {price}=req.body;
+    const {price,productId}=req.body;
     const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -65,6 +81,6 @@ router.post('/create-checkout-session', async (req, res) => {
     success_url: `${YOUR_DOMAIN}/success`,
     cancel_url: `${YOUR_DOMAIN}/cancel`,
   });
-  res.json({url:session.url});
+  res.json({url:session.url,productId});
 });
 module.exports = router;
