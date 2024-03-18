@@ -25,11 +25,9 @@ const Dashboard = () => {
       const base64String = reader.result;
       let url;
       if(isUpdating){
-        // url = `${ServerUrl}/api/product/update/${Id}`;
-        url = `http://localhost:8000/api/product/update/${Id}`;
+        url = `${ServerUrl}/api/product/update/${Id}`;
       }else{
-        // url = `${ServerUrl}/api/product/add`;
-        url = `http://localhost:8000/api/product/add`;
+        url = `${ServerUrl}/api/product/add`;
       }
       fetch(url, {
         method: "POST",

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DataContext } from './DataState';
 const Login = ( props) => {
     const {isAdmin}=props;
-    const {setAdmin} = useContext(DataContext);
+    const {setAdmin,ServerUrl} = useContext(DataContext);
     const {isLoginpage} = props;
     const [data,setData] = useState({
         ...(!isLoginpage && {name:""}),
@@ -14,7 +14,7 @@ const Login = ( props) => {
     const handleClicked=async(e)=>{
       e.preventDefault();
         if(!isLoginpage){
-            const res = await fetch("http://localhost:8000/api/user/signup",{
+            const res = await fetch(`${ServerUrl}/api/user/signup`,{
                 method:"POST",
                 headers:{"Content-Type": "application/json"},
                 body:JSON.stringify({"name":data.name,"email":data.email,"password":data.password,"isAdmin":isAdmin})
@@ -36,7 +36,7 @@ const Login = ( props) => {
             else alert(result.msg);
           }
           else{
-            const res = await fetch("http://localhost:8000/api/user/login",{
+            const res = await fetch(`${ServerUrl}/api/user/login`,{
               method:"POST",
               headers:{"Content-Type": "application/json"},
               body:JSON.stringify({"email":data.email,"password":data.password,"isAdmin":isAdmin})

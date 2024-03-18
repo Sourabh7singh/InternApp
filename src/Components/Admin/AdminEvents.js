@@ -11,7 +11,7 @@ const AdminEvents = () => {
     const [isUpdating,setisUpdating]=useState(false);
 
     const HandleDelete = async (id) => {
-        const res = await fetch(`http://localhost:8000/api/events/delete`, {
+        const res = await fetch(`${ServerUrl}/api/events/delete`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
