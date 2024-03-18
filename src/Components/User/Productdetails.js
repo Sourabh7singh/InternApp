@@ -5,7 +5,7 @@ import { DataContext } from '../DataState';
 
 const Productdetails = () => {
     const navigate = useNavigate();
-    const {products} = useContext(DataContext);
+    const {products,ServerUrl} = useContext(DataContext);
     const [product, setProduct] = useState();
     const currentProduct = localStorage.getItem("CurrentProduct");
     useEffect(() => {
@@ -17,6 +17,19 @@ const Productdetails = () => {
         }
         // eslint-disable-next-line
     }, []);
+    const HandlePurchase = async(price)=>{
+        const res = await fetch(`${ServerUrl}/api/product/create-checkout-session`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({"price":price})
+        })
+        const result = await res.json();
+        // navigate(result.url);
+        window.location.href = result.url;
+        // console.log(result);
+    }
     return (
         <>
             <Navbar />
@@ -44,7 +57,7 @@ const Productdetails = () => {
                             <h3>Price: {product.price}/-</h3>
                         </div>
                         <div className="buy">
-                            <button className='btn btn-primary'>Buy This course</button>
+                            <button className='btn btn-primary' onClick={()=>HandlePurchase(product.price)}>Buy This course</button>
                         </div>
                     </div>
                 }

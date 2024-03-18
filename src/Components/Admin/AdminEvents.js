@@ -3,7 +3,7 @@ import Navbar from '../Navbar'
 import { DataContext } from '../DataState';
 
 const AdminEvents = () => {
-    const { events, fetchData,convertTo12HourFormat } = useContext(DataContext);
+    const { events, fetchData,convertTo12HourFormat,ServerUrl } = useContext(DataContext);
     const [name,setName]=useState("");
     const [description,setDescription]=useState("");
     const [date,setDate]=useState("");
@@ -32,9 +32,9 @@ const AdminEvents = () => {
     }
     const HandleEvent=async(e)=>{
         e.preventDefault();
-        let url="http://localhost:8000/api/events/add";
+        let url=`${ServerUrl}/api/events/add`;
         if(isUpdating){
-            url = "http://localhost:8000/api/events/update";
+            url = `${ServerUrl}/api/events/update`;
         }
         const res = await fetch(url, {
             method:"POST",

@@ -6,13 +6,13 @@ import events3 from '../../Assets/Images/events3.jpg'
 import events4 from '../../Assets/Images/events4.jpg'
 import { DataContext } from '../DataState';
 const Events = () => {
-    const {events,convertTo12HourFormat} = useContext(DataContext);
+    const {events,convertTo12HourFormat,ServerUrl} = useContext(DataContext);
     const userId = localStorage.getItem("userId");
     console.log(typeof(userId));
     const HandleJoin=async(id)=>{
         const choice = window.confirm("Press a button!");
         if(choice){
-            const res = await fetch(`http://localhost:8000/api/events/join/${id}`,{
+            const res = await fetch(`${ServerUrl}/api/events/join/${id}`,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -75,7 +75,7 @@ const Events = () => {
                         <h5 className="card-title"><strong>Name:</strong> {item.name}</h5>
                         <p className="card-text"><strong>Description:</strong> {item.description}</p>
                         <p className="card-text"><strong>Date:</strong> {item.date.slice(0,10)},<strong>Time:</strong>{convertTo12HourFormat(item.date.slice(11,16))}</p>
-                        <p className="card-text"><strong>Joined By:</strong> {item.joinedBy.length()}</p>
+                        {/* <p className="card-text"><strong>Joined By:</strong> {item.joinedBy.length()}</p> */}
                         <button className="btn btn-primary" onClick={(e) => HandleJoin(item._id)}>Join the Event</button>
                     </div>
                 </div>

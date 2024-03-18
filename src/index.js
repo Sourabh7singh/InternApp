@@ -13,6 +13,8 @@ import DataState from './Components/DataState';
 import Events from './Components/User/Events';
 import Dashboard from './Components/Admin/Dashboard';
 import AdminEvents from './Components/Admin/AdminEvents';
+import Success from './Components/User/Success';
+import Cancel from './Components/User/Cancel';
 
 const router = createBrowserRouter([
   //User Routes
@@ -57,7 +59,14 @@ const router = createBrowserRouter([
     path: "/admin/events",
     element: <AdminEvents/>
   },
-  
+  {
+    path: "/success",
+    element: <Success/>
+  },
+  {
+    path: "/cancel",
+    element: <Cancel/>
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

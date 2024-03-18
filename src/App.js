@@ -7,7 +7,7 @@ function App() {
   const {isAdmin} = useContext(DataContext);
   return (
     <>
-    {isAdmin?<Dashboard/>:<Products/>}
+    {isAdmin?<Dashboard key={process.env.REACT_APP_URL}/>:<Products/>}
     </>
   );
 }

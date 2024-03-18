@@ -1,12 +1,12 @@
 import React, { createContext, useEffect, useState } from 'react'
-
 export const DataContext = createContext();
 const DataState = (props) => {
     const [products,setProduct]=useState([]);
+    const ServerUrl = "https://internapp.onrender.com";
     const [events,setEvents]=useState([]);
     const [isAdmin,setAdmin]=useState(JSON.parse(localStorage.getItem('isAdmin'))||false);
     const fetchData =async()=>{
-        const products = await fetch("http://localhost:8000/api/product/fetch",{
+        const products = await fetch(`${ServerUrl}/api/product/fetch`,{
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
@@ -14,7 +14,7 @@ const DataState = (props) => {
         })
         const parsedProducts = await products.json();
         setProduct(parsedProducts);
-        const event = await fetch("http://localhost:8000/api/events",{
+        const event = await fetch(`${ServerUrl}/api/events`,{
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
@@ -39,7 +39,7 @@ const DataState = (props) => {
         // eslint-disable-next-line
     },[]);
   return (
-    <DataContext.Provider value={{events,products,isAdmin,setAdmin,fetchData,convertTo12HourFormat}}>
+    <DataContext.Provider value={{events,products,isAdmin,setAdmin,fetchData,convertTo12HourFormat,ServerUrl}}>
         {props.children}
     </DataContext.Provider>
   )

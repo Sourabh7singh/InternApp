@@ -3,12 +3,11 @@ import Navbar from '../Navbar';
 import { DataContext } from '../DataState';
 
 const Dashboard = () => {
-  const { isAdmin, products,fetchData } = useContext(DataContext);
+  const { isAdmin, products,fetchData,ServerUrl } = useContext(DataContext);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [imageFile, setImageFile] = useState(null); // Store the file itself
-  const [Parsedimage, setParsedimage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleEvent = (e) => {
@@ -21,27 +20,42 @@ const Dashboard = () => {
     const reader = new FileReader();
     reader.onloadend = () => {
       const base64String = reader.result;
-      fetch("http://localhost:8000/api/product/add", {
+      fetch(`${ServerUrl}//api/product/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({name,description,price,image:Parsedimage}),
+        body: JSON.stringify({name,description,price,image:base64String}),
       }).then((res) => res.json()).then((data) => alert(data.msg));
       // AddCourse();
     };
     reader.readAsDataURL(imageFile);
     fetchData();
   };
-  const handleUpdate = (id) => {
-    // Handle update logic
+  const handleUpdate = async(id) => {
+    setIsUpdating(true);
+    // let url=`${ServerUrl}/api/events/add`;
+    // if(isUpdating){
+    //   url = `${ServerUrl}/api/events/update`;
+    // }
+    console.log(`${ServerUrl}/api/product/fetchone`);
+    const res = await fetch(`${ServerUrl}/api/product/fetchone`, {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({id})
+    })
+    const result = await res.json();
+    console.log(result);
+    setIsUpdating(false);
     fetchData();
   };
   
   const handleDelete = async(id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
     if (confirmDelete) {
-      const res = await fetch(`http://localhost:8000/api/product/delete/${id}`, {
+      const res = await fetch(`${ServerUrl}/api/product/delete/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +101,6 @@ const Dashboard = () => {
                 <h5 className="card-title"><strong>Course name:</strong> {item.course_name}</h5>
                 <p className="card-text"><strong>Description:</strong> {item.description}</p>
                 <p className="card-text"><strong>Price:</strong> Rs.{item.price}/-</p>
-                <p className="card-text"><strong>Purchased By:</strong> Rs.{item.purchasedBy.length}</p>
                 <button className="btn btn-primary m-1" onClick={() => handleUpdate(item._id)}>Update</button>
                 <button className="btn btn-primary m-1" onClick={() => handleDelete(item._id)}>Delete</button>
               </div>
