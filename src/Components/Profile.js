@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from './Navbar'
+import { DataContext } from './DataState';
 
 const Profile = () => {
+  const {ServerUrl} = useContext(DataContext);
   const [name, setName] = useState('');
   const [ViewName, setViewName] = useState('');
   const [email, setEmail] = useState('');
   const userId = localStorage.getItem("userId");
   const fetchUser=async()=>{
     const userId = localStorage.getItem("userId");
-    const res = await fetch(`http://localhost:8000/api/user/myprofile/${userId}`);
+    const res = await fetch(`${ServerUrl}/api/user/myprofile/${userId}`);
     const User = await res.json();
     setName(User.name);
     setViewName(User.name);
@@ -20,7 +22,7 @@ useEffect(()=>{
 
 const handleSubmit = async(e) => {
   e.preventDefault();
-  const res = await fetch(`http://localhost:8000/api/user/updateprofile`, {
+  const res = await fetch(`${ServerUrl}/api/user/updateprofile`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

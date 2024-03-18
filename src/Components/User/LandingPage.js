@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Navbar from '../Navbar'
 import card1 from '../../Assets/Images/card1.jpg'
 import card2 from '../../Assets/Images/card2.jpg'
 import card3 from '../../Assets/Images/card3.jpg'
 import { useNavigate } from 'react-router-dom'
+import { DataContext } from '../DataState'
 const LandingPage = () => {
+    const {ServerUrl}= useContext(DataContext);
     const [data,setData]=useState([]);
     const authToken = localStorage.getItem("authToken")||" ";
     useEffect(()=>{
@@ -12,7 +14,7 @@ const LandingPage = () => {
       // eslint-disable-next-line
     },[]);
     const fetchData =async()=>{
-        const res = await fetch("http://localhost:8000/api/product/fetch",{
+        const res = await fetch(`${ServerUrl}/api/product/fetch`,{
             method:"GET",
             headers:{
                 "Content-Type":"application/json",
