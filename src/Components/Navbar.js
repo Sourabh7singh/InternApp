@@ -9,6 +9,7 @@ const Navbar = () => {
         e.preventDefault();
         localStorage.removeItem("authToken");
         localStorage.removeItem("isAdmin");
+        localStorage.removeItem("userId");
         window.location.href="/user/login";
     }
     return (
@@ -20,7 +21,7 @@ const Navbar = () => {
                 </button>
                 <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
                     <div className="offcanvas-header">
-                        <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>
+                        <h5 className="offcanvas-title" id="offcanvasNavbarLabel">CourseMania</h5>
                         <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div className="offcanvas-body">

@@ -24,6 +24,7 @@ const Login = ( props) => {
               alert("User Registered Successfully");
               localStorage.setItem("authToken",result.authToken);
               localStorage.setItem("isAdmin",result.isAdmin);
+              localStorage.setItem("userId",result.id);
               setAdmin(result.isAdmin);
               if(result.isAdmin){
                 navigate("/admin");
@@ -45,6 +46,7 @@ const Login = ( props) => {
               alert("Login Successfully");
               localStorage.setItem("authToken",result.authToken);
               localStorage.setItem("isAdmin",result.isAdmin);
+              localStorage.setItem("userId",result.id);
               setAdmin(result.isAdmin);
               if(result.isAdmin){
                 navigate("/admin");

@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 dotenv.config();
-
+const bodyParser = require('body-parser');
 const express = require('express');
 const connectMongo = require("./db");
 const cors = require('cors');
@@ -10,6 +10,9 @@ const User = require('./Models/User');
 connectMongo();
 const port = process.env.port;
 
+// Increase the limit to 50MB (or any size that suits your needs)
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.json());
 // Enable CORS for all domains
 app.use(cors());

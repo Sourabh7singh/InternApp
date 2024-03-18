@@ -10,9 +10,12 @@ const EventSchema = new Schema({
         type:String,
         required:true
     },
+    joinedBy:{
+        type:Array,
+    },
     date:{
-        type:Date,
-        default:Date.now
+        type:String,
+        required:true
     }
 })
 

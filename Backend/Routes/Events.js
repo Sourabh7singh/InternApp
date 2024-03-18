@@ -21,24 +21,42 @@ router.post("/delete",async(req,res)=>{
 router.post("/add",async(req,res)=>{
     const event = new Events({
         name:req.body.name,
-        description:req.body.description
+        description:req.body.description,
+        date:req.body.date
     })
     try {
         const savedEvent = await event.save();
-        res.json(savedEvent);
+        res.json({"msg":`Event with name ${savedEvent.name} added successfully`});
     } catch (error) {
-        res.json("Error");
+        res.json({"msg":"Error"});
     }
 })
 router.post("/update",async(req,res)=>{
+    const {id,name,description,date} = req.body;
     try {
-        const event = await Events.findByIdAndUpdate(req.body.id,{
-            name:req.body.name,
-            description:req.body.description
-        });
-        res.json(event);
+        const event = await Events.findByIdAndUpdate(req.body.id,{name,description,date});
+        res.json({"msg":`Event Updated ${event.name}`});
     } catch (error) {
-        res.json("Error");
+        console.log(error.message);
+        res.json({"msg":"Error"});
     }
+})
+//Join an event by user
+router.post("/join/:id",async(req,res)=>{
+    const {id} = req.params;
+    try {
+        const event = await Events.findById(id);
+        if(event){
+            event.joinedBy.push(req.body.userId);
+            const savedEvent = await event.save();
+            res.json({"msg":`Joined ${savedEvent.name}`});
+        }else{
+            res.json({"msg":"Event not found"});
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.json({"msg":"Error"});
+    }
+    
 })
 module.exports = router;

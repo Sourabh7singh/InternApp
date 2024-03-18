@@ -38,7 +38,7 @@ router.post("/signup", [
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken ,isAdmin:user.isAdmin});
+        res.json({id:user._id, authToken ,isAdmin:user.isAdmin});
     }
     catch (error) {
         console.error(error.message);
@@ -72,9 +72,8 @@ router.post("/login", [
                 id: user.id
             }
         }
-        console.log(user);
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken ,isAdmin:user.isAdmin});
+        res.json({id:user._id, authToken ,isAdmin:user.isAdmin});
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Internal Server Error");

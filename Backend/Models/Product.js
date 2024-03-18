@@ -16,6 +16,9 @@ const ProductSchema = new Schema({
     image:{
         type:String,
         required:true
+    },
+    purchasedBy:{
+        type:Array
     }
   });
 

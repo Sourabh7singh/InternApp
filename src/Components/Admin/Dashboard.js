@@ -1,16 +1,103 @@
-import React, { useContext } from 'react'
-import Navbar from '../Navbar'
+import React, { useContext, useState } from 'react';
+import Navbar from '../Navbar';
 import { DataContext } from '../DataState';
 
 const Dashboard = () => {
-  const {isAdmin} = useContext(DataContext);
-  console.log(isAdmin);
+  const { isAdmin, products,fetchData } = useContext(DataContext);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [imageFile, setImageFile] = useState(null); // Store the file itself
+  const [Parsedimage, setParsedimage] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const handleEvent = (e) => {
+    e.preventDefault();
+    // Convert image to base64
+    if (!name || !description || !price || !imageFile) {
+      alert("Please fill all the details");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      fetch("http://localhost:8000/api/product/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({name,description,price,image:Parsedimage}),
+      }).then((res) => res.json()).then((data) => alert(data.msg));
+      // AddCourse();
+    };
+    reader.readAsDataURL(imageFile);
+    fetchData();
+  };
+  const handleUpdate = (id) => {
+    // Handle update logic
+    fetchData();
+  };
+  
+  const handleDelete = async(id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete?");
+    if (confirmDelete) {
+      const res = await fetch(`http://localhost:8000/api/product/delete/${id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      const result = await res.json();
+      alert(result.msg);
+    }
+    fetchData();
+  };
+
   return (
     <>
-    <Navbar/>
-    Admin Dashboard
+      <Navbar />
+      Admin Dashboard
+      <form className='m-5' style={{ border: "1px solid black", borderRadius: "15px", padding: "20px" }}>
+        <h3 className='fs-3 text-center font-monospace'>Add a New Course</h3>
+        <div className="mb-3">
+          <label htmlFor="name" className="form-label">Enter the name of the Course</label>
+          <input type="text" className="form-control" id="name" aria-describedby="emailHelp" value={name} onChange={(e) => setName(e.target.value)} />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="description" className="form-label">Description</label>
+          <input type="text" className="form-control" id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="price" className="form-label">Price</label>
+          <input type="number" className="form-control" id="price" value={price} onChange={(e) => setPrice(e.target.value)} />
+        </div>
+        <div className="mb-3">
+          <input type="file" accept='image/*' className="form-control" id="photo" onChange={(e) => setImageFile(e.target.files[0])} />
+        </div>
+        <button type="submit" className="btn btn-primary m-auto d-block" onClick={handleEvent}>
+          {isUpdating ? "Update the Course" : "Add New Course"}
+        </button>
+      </form>
+      <div className='d-grid' style={{ gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
+        {products.length>0?
+          products.map((item, index) => (
+            <div key={index} className="card m-5">
+              <img src={item.image} className="card-img-top" alt="..." />
+              <div className="card-body">
+                <h5 className="card-title"><strong>Course name:</strong> {item.course_name}</h5>
+                <p className="card-text"><strong>Description:</strong> {item.description}</p>
+                <p className="card-text"><strong>Price:</strong> Rs.{item.price}/-</p>
+                <p className="card-text"><strong>Purchased By:</strong> Rs.{item.purchasedBy.length}</p>
+                <button className="btn btn-primary m-1" onClick={() => handleUpdate(item._id)}>Update</button>
+                <button className="btn btn-primary m-1" onClick={() => handleDelete(item._id)}>Delete</button>
+              </div>
+            </div>
+          ))
+          :<h5 className='text-center'>No courses found</h5>
+        }
+      </div>
     </>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;
