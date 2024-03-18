@@ -71,7 +71,7 @@ const Login = ( props) => {
         <label htmlFor="email">Enter your Email address</label>
         <input onChange={(e)=>{setData({...data,email:e.target.value})}} value={data.email} type="email" name="email" id="email" />
         <label htmlFor="password">Enter your password</label>
-        <input onChange={(e)=>{setData({...data,password:e.target.value})}} value={data.password} type="text" name="password" id="password" />
+        <input onChange={(e)=>{setData({...data,password:e.target.value})}} value={data.password} type="password" name="password" id="password" />
         <button type="submit" className='submit-btn' onSubmit={(e)=>handleClicked(e)} onClick={(e)=>handleClicked(e)}>{isLoginpage?"Log in":"Signup"}</button>
         {!isLoginpage && <span>Already Have an account <Link to={`${isAdmin?"/admin/login":"/user/login"}`} style={{display:"inline",marginLeft:"5px"}}>Login?</Link></span>}
         {isLoginpage && <span>Don't Have an account <Link to={`${isAdmin?"/admin/signin":"/user/signin"}`} style={{display:"inline",marginLeft:"5px"}}>create account?</Link></span>}
