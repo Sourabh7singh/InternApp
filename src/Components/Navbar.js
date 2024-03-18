@@ -4,7 +4,6 @@ import { DataContext } from './DataState'
 
 const Navbar = () => {
     const {isAdmin} = useContext(DataContext);
-    // console.log(isAdmin);
     const handleLogout=(e)=>{
         e.preventDefault();
         localStorage.removeItem("authToken");

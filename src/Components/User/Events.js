@@ -7,7 +7,6 @@ import events4 from '../../Assets/Images/events4.jpg'
 import { DataContext } from '../DataState';
 const Events = () => {
     const {events,convertTo12HourFormat,ServerUrl,joinedEvents} = useContext(DataContext);
-    console.log(joinedEvents);
     const userId = localStorage.getItem("userId");
     const HandleJoin=async(id)=>{
         const choice = window.confirm("Press a button!");

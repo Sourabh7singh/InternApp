@@ -18,6 +18,7 @@ const Profile = () => {
   }
 useEffect(()=>{
   fetchUser();
+  //eslint-disable-next-line
 },[])
 
 const handleSubmit = async(e) => {
