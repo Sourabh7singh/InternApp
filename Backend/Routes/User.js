@@ -79,5 +79,26 @@ router.post("/login", [
         res.status(500).send("Internal Server Error");
     }
 })
-
+router.get("/myprofile/:id", async (req, res) => {
+    try {
+        let user = await User.findById(req.params.id);
+        res.json({name:user.name,email:user.email});
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
+router.post("/updateprofile", async (req, res) => {
+    const {userId,name,email} = req.body;
+    try {
+        let user = await User.findById(userId);
+        user.name = name;
+        user.email = email;
+        await user.save();
+        res.json({"msg":"Profile updated successfully"});
+    }catch (error) {
+        console.error(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
 module.exports = router;

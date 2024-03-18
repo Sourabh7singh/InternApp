@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import './Dashboard.css';
+import React, { useContext, useState, useEffect } from 'react';
 import Navbar from '../Navbar';
 import { DataContext } from '../DataState';
 
 const Dashboard = () => {
-  const { products,fetchData,ServerUrl } = useContext(DataContext);
+  const { products, fetchData, ServerUrl } = useContext(DataContext);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -16,7 +17,7 @@ const Dashboard = () => {
     e.preventDefault();
     // Convert image to base64
     if (!name || !description || !price || !imageFile) {
-      console.log(name,description,price,imageFile);
+      console.log(name, description, price, imageFile);
       alert("Please fill all the details");
       return;
     }
@@ -24,9 +25,9 @@ const Dashboard = () => {
     reader.onloadend = () => {
       const base64String = reader.result;
       let url;
-      if(isUpdating){
+      if (isUpdating) {
         url = `${ServerUrl}/api/product/update/${Id}`;
-      }else{
+      } else {
         url = `${ServerUrl}/api/product/add`;
       }
       fetch(url, {
@@ -34,13 +35,13 @@ const Dashboard = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({name,description,price,image:base64String}),
+        body: JSON.stringify({ name, description, price, image: base64String }),
       }).then((res) => res.json()).then((data) => alert(data.msg));
     };
     fetchData();
     reader.readAsDataURL(imageFile);
   };
-  const handleUpdate = async(id) => {
+  const handleUpdate = async (id) => {
     setIsUpdating(true);
     const current = products.filter((item) => item._id === id)[0];
     setName(current.course_name);
@@ -50,8 +51,8 @@ const Dashboard = () => {
     setId(id);
     fetchData();
   };
-  
-  const handleDelete = async(id) => {
+
+  const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete?");
     if (confirmDelete) {
       const res = await fetch(`${ServerUrl}/api/product/delete/${id}`, {
@@ -66,10 +67,60 @@ const Dashboard = () => {
     fetchData();
   };
 
+  const [daySales, setDaySales] = useState(0);
+  const [weekSales, setWeekSales] = useState(0);
+  const [monthSales, setMonthSales] = useState(0);
+  const [yearSales, setYearSales] = useState(0);
+  const [lifetimeSales, setLifetimeSales] = useState(0);
+
+  // Fetch sales data
+  useEffect(() => {
+    // Simulated API call
+    // Replace this with actual API call to fetch sales data
+    const fetchSalesData = async () => {
+      // Simulated sales data
+      fetch("http://localhost:8000/api/product/sales").then((res) => res.json()).then((data) => {
+        setDaySales(data.oneDaySales);
+        setWeekSales(data.oneWeekSales);
+        setMonthSales(data.oneMonthSales);
+        setYearSales(data.oneYearSales);
+        setLifetimeSales(data.lifetimeSales);
+      })
+    };
+
+    fetchSalesData();
+  }, []);
+
   return (
     <>
       <Navbar />
-      Admin Dashboard
+      {/* Main Dashboard  */}
+      <div className="dashboard-container">
+        <h1 className="dashboard-title">Admin Dashboard</h1>
+        <div className="sales-info">
+          <div className="sales-card">
+            <h2>One Day Sales</h2>
+            <p className="sales-amount">${daySales}</p>
+          </div>
+          <div className="sales-card">
+            <h2>One Week Sales</h2>
+            <p className="sales-amount">${weekSales}</p>
+          </div>
+          <div className="sales-card">
+            <h2>One Month Sales</h2>
+            <p className="sales-amount">${monthSales}</p>
+          </div>
+          <div className="sales-card">
+            <h2>One Year Sales</h2>
+            <p className="sales-amount">${yearSales}</p>
+          </div>
+          <div className="sales-card">
+            <h2>Lifetime Sales</h2>
+            <p className="sales-amount">${lifetimeSales}</p>
+          </div>
+        </div>
+      </div>
+
       <form className='m-5' style={{ border: "1px solid black", borderRadius: "15px", padding: "20px" }}>
         <h3 className='fs-3 text-center font-monospace'>Add a New Course</h3>
         <div className="mb-3">
@@ -92,7 +143,7 @@ const Dashboard = () => {
         </button>
       </form>
       <div className='d-grid' style={{ gridTemplateColumns: "1fr 1fr 1fr 1fr" }}>
-        {products.length>0?
+        {products.length > 0 ?
           products.map((item, index) => (
             <div key={index} className="card m-5">
               <img src={item.image} className="card-img-top" alt="..." />
@@ -105,7 +156,7 @@ const Dashboard = () => {
               </div>
             </div>
           ))
-          :<h5 className='text-center'>No courses found</h5>
+          : <h5 className='text-center'>No courses found</h5>
         }
       </div>
     </>

@@ -4,7 +4,9 @@ const DataState = (props) => {
     const [products,setProduct]=useState([]);
     const ServerUrl = "https://internapp.onrender.com";
     const [events,setEvents]=useState([]);
+    const [joinedEvents,setjoinedEvents]=useState([]);
     const [isAdmin,setAdmin]=useState(JSON.parse(localStorage.getItem('isAdmin'))||false);
+    const userId = localStorage.getItem("userId");
     const fetchData =async()=>{
         const products = await fetch(`${ServerUrl}/api/product/fetch`,{
             method:"GET",
@@ -21,7 +23,8 @@ const DataState = (props) => {
             }
         })
         const parsedEvents = await event.json();
-        setEvents(parsedEvents);
+        setEvents(parsedEvents.filter(item => !item.joinedBy.includes(userId)));
+        setjoinedEvents(parsedEvents.filter(item => item.joinedBy.includes(userId)));
     }
     function convertTo12HourFormat(time24) {
         var timeSplit = time24.split(':');
@@ -39,7 +42,7 @@ const DataState = (props) => {
         // eslint-disable-next-line
     },[]);
   return (
-    <DataContext.Provider value={{events,products,isAdmin,setAdmin,fetchData,convertTo12HourFormat,ServerUrl}}>
+    <DataContext.Provider value={{events,products,isAdmin,setAdmin,fetchData,convertTo12HourFormat,ServerUrl,joinedEvents}}>
         {props.children}
     </DataContext.Provider>
   )

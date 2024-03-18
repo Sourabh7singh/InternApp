@@ -83,4 +83,60 @@ router.post('/create-checkout-session', async (req, res) => {
   });
   res.json({url:session.url,productId});
 });
+//Get all sales for admin
+router.get('/sales', async (req, res) => {
+    try {
+        const today = new Date();
+        const oneDayAgo = new Date(today);
+        oneDayAgo.setDate(today.getDate() - 1);
+
+        const oneWeekAgo = new Date(today);
+        oneWeekAgo.setDate(today.getDate() - 7);
+
+        const oneMonthAgo = new Date(today);
+        oneMonthAgo.setMonth(today.getMonth() - 1);
+
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+
+        const matchQuery = { 'purchasedBy': { $exists: true, $ne: [] } }; // Match documents where purchasedBy exists and is not an empty array
+
+        const oneDaySales = await Product.aggregate([
+            { $match: { ...matchQuery, 'purchasedBy.date': { $gte: oneDayAgo } } },
+            { $group: { _id: null, totalSales: { $sum: '$price' } } }
+        ]);
+
+        const oneWeekSales = await Product.aggregate([
+            { $match: { ...matchQuery, 'purchasedBy.date': { $gte: oneWeekAgo } } },
+            { $group: { _id: null, totalSales: { $sum: '$price' } } }
+        ]);
+
+        const oneMonthSales = await Product.aggregate([
+            { $match: { ...matchQuery, 'purchasedBy.date': { $gte: oneMonthAgo } } },
+            { $group: { _id: null, totalSales: { $sum: '$price' } } }
+        ]);
+
+        const oneYearSales = await Product.aggregate([
+            { $match: { ...matchQuery, 'purchasedBy.date': { $gte: oneYearAgo } } },
+            { $group: { _id: null, totalSales: { $sum: '$price' } } }
+        ]);
+
+        const lifetimeSales = await Product.aggregate([
+            { $match: matchQuery },
+            { $group: { _id: null, totalSales: { $sum: '$price' } } }
+        ]);
+
+        res.json({
+            oneDaySales: oneDaySales.length > 0 ? oneDaySales[0].totalSales : 0,
+            oneWeekSales: oneWeekSales.length > 0 ? oneWeekSales[0].totalSales : 0,
+            oneMonthSales: oneMonthSales.length > 0 ? oneMonthSales[0].totalSales : 0,
+            oneYearSales: oneYearSales.length > 0 ? oneYearSales[0].totalSales : 0,
+            lifetimeSales: lifetimeSales.length > 0 ? lifetimeSales[0].totalSales : 0
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
 module.exports = router;
