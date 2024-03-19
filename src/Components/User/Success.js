@@ -11,7 +11,7 @@ const Success = () => {
         window.location.href = "/user";
     }, 5000);
     useEffect(()=>{
-        fetch(`${ServerUrl}api/product/purchased`,{
+        fetch(`${ServerUrl}/api/product/purchased`,{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"

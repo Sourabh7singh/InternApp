@@ -78,8 +78,8 @@ const Dashboard = () => {
     // Simulated API call
     // Replace this with actual API call to fetch sales data
     const fetchSalesData = async () => {
-      // Simulated sales data
-      fetch("http://localhost:8000/api/product/sales").then((res) => res.json()).then((data) => {
+      // fetch(`${ServerUrl}/api/product/sales`).then((res) => res.json()).then((data) => {
+      fetch(`${ServerUrl}/api/product/sales`).then((res) => res.json()).then((data) => {
         setDaySales(data.oneDaySales);
         setWeekSales(data.oneWeekSales);
         setMonthSales(data.oneMonthSales);
@@ -100,23 +100,23 @@ const Dashboard = () => {
         <div className="sales-info">
           <div className="sales-card">
             <h2>One Day Sales</h2>
-            <p className="sales-amount">${daySales}</p>
+            <p className="sales-amount">Rs. {daySales}/-</p>
           </div>
           <div className="sales-card">
             <h2>One Week Sales</h2>
-            <p className="sales-amount">${weekSales}</p>
+            <p className="sales-amount">Rs. {weekSales}/-</p>
           </div>
           <div className="sales-card">
             <h2>One Month Sales</h2>
-            <p className="sales-amount">${monthSales}</p>
+            <p className="sales-amount">Rs. {monthSales}/-</p>
           </div>
           <div className="sales-card">
             <h2>One Year Sales</h2>
-            <p className="sales-amount">${yearSales}</p>
+            <p className="sales-amount">Rs. {yearSales}/-</p>
           </div>
           <div className="sales-card">
             <h2>Lifetime Sales</h2>
-            <p className="sales-amount">${lifetimeSales}</p>
+            <p className="sales-amount">Rs. {lifetimeSales}/-</p>
           </div>
         </div>
       </div>
@@ -151,6 +151,7 @@ const Dashboard = () => {
                 <h5 className="card-title"><strong>Course name:</strong> {item.course_name}</h5>
                 <p className="card-text"><strong>Description:</strong> {item.description}</p>
                 <p className="card-text"><strong>Price:</strong> Rs.{item.price}/-</p>
+                {/* <p className="card-text"><strong>Purchased By:</strong> Rs.{item.purchasedBy.length}/-</p> */}
                 <button className="btn btn-primary m-1" onClick={() => handleUpdate(item._id)}>Update</button>
                 <button className="btn btn-primary m-1" onClick={() => handleDelete(item._id)}>Delete</button>
               </div>

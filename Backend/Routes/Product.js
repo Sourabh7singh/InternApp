@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Models/Product');
-const stripe = require('stripe')("sk_test_tR3PYbcVNZZ796tH88S4VQ2u");
+const stripe = require('stripe')(process.env.stripe_key);
 //Fetch all the products
 router.get('/fetch', async (req, res) => {
     try {
@@ -18,7 +18,7 @@ router.post("/add",async(req,res)=>{
             course_name:req.body.name,
             description:req.body.description,
             price:req.body.price,
-            image:req.body.image
+            image:req.body.image,
         })
         await newProduct.save();
         res.json({"msg":`Product with name ${newProduct.course_name} added successfully`});
@@ -47,7 +47,7 @@ router.post("/purchased",async(req,res)=>{
     const {userId,productId} = req.body;
     try {
         const product = await Product.findById(productId);
-        console.log("here");
+        product.purchasedBy=[];
         if(product){
             product.purchasedBy.push({userId,Date:new Date()});
             const savedProduct = await product.save();
@@ -61,7 +61,6 @@ router.post("/purchased",async(req,res)=>{
     }
 })
 //update after hosting it
-const YOUR_DOMAIN = 'http://localhost:3000';
 router.post('/create-checkout-session', async (req, res) => {
     const {price,productId}=req.body;
     const session = await stripe.checkout.sessions.create({
@@ -78,8 +77,8 @@ router.post('/create-checkout-session', async (req, res) => {
       },
     ],
     mode: 'payment',
-    success_url: `${YOUR_DOMAIN}/success`,
-    cancel_url: `${YOUR_DOMAIN}/cancel`,
+    success_url:`https://coursemania-ten.vercel.app/success`,
+    cancel_url: `https://coursemania-ten.vercel.app/cancel`,
   });
   res.json({url:session.url,productId});
 });
