@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Models/Product');
-const stripe = require('stripe')(process.env.stripe_key);
+const stripe = require('stripe')("sk_test_tR3PYbcVNZZ796tH88S4VQ2u");
 //Fetch all the products
 router.get('/fetch', async (req, res) => {
     try {
